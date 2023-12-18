@@ -14,10 +14,13 @@ param(
     [string]$targetFramework,
     [string]$logFilePath
 )
+
+# Check if the log file exists, if not create it
 if (-not (Test-Path -Path $logFilePath)) {
     New-Item -Path $logFilePath -ItemType File -Force | Out-Null
 }
 
+# Check for missing or incorrect parameters
 if (-not $upgradeAssistantPath -or -not (Test-Path -Path $upgradeAssistantPath) -or -not $solutionPath) {
     $errorMessage = "Error: .Net Upgrade Assistant Path or Solution path is missing or incorrect."  
     Write-Host $errorMessage
@@ -25,45 +28,77 @@ if (-not $upgradeAssistantPath -or -not (Test-Path -Path $upgradeAssistantPath) 
     exit 1
 }
 
-if (-not (Test-Path -Path $solutionPath)) {
-    $errorMessage = "Error: Solution file not found." 
-    Write-Host $errorMessage
-    Add-Content -Path $logFilePath -Value $errorMessage
-    exit 1
-}
 try {
-    $argumentList = @("upgrade", "$solutionPath")
+    $argumentList = @()
 
+    # Check if nonInteractive is "Yes"
     if ($nonInteractive -eq "Yes") {
-        $argumentList += "--non-interactive"
-    }
-    if($skipBackup -eq "Yes"){
-        $argumentList += "--skip-backup"
-    }
-    if($targetFramework -eq "Long Term Support"){
-        $argumentList += "--target-tfm-support LTS"
-    }
-    if($targetFramework -eq "Standard Term Support"){
-        $argumentList += "--target-tfm-support STS"
-    }
-    if($targetFramework -eq "Preview"){
-        $argumentList += "--target-tfm-support Preview"
-    }
+        # Split the comma-separated solution paths
+        $solutionPaths = $solutionPath -split ','
 
-    Start-Process -FilePath $upgradeAssistantPath -ArgumentList $argumentList -Wait -ErrorAction Stop
+        foreach ($solutionPath in $solutionPaths) {
+            # Check if each solution file exists
+            if (-not (Test-Path -Path $solutionPath)) {
+                $errorMessage = "Error: Solution file not found: $solutionPath" 
+                Write-Host $errorMessage
+                Add-Content -Path $logFilePath -Value $errorMessage
+                exit 1
+            }
+
+            $argumentList = @("upgrade", "$solutionPath")
+            $argumentList += "--non-interactive"
+            if ($skipBackup -eq "Yes") {
+                $argumentList += "--skip-backup"
+            }
+            if ($targetFramework -eq "Long Term Support") {
+                $argumentList += "--target-tfm-support LTS"
+            }
+            if ($targetFramework -eq "Standard Term Support") {
+                $argumentList += "--target-tfm-support STS"
+            }
+            if ($targetFramework -eq "Preview") {
+                $argumentList += "--target-tfm-support Preview"
+            }
+
+            # Start the process for each solution path
+            Start-Process -FilePath $upgradeAssistantPath -ArgumentList $argumentList -Wait -ErrorAction Stop
+        }
+    }
+    else {
+        #Interactive mode
+        $argumentList = @("upgrade", "$solutionPath")
+
+        if ($skipBackup -eq "Yes") {
+            $argumentList += "--skip-backup"
+        }
+        if ($targetFramework -eq "Long Term Support") {
+            $argumentList += "--target-tfm-support LTS"
+        }
+        if ($targetFramework -eq "Standard Term Support") {
+            $argumentList += "--target-tfm-support STS"
+        }
+        if ($targetFramework -eq "Preview") {
+            $argumentList += "--target-tfm-support Preview"
+        }
+
+        # Start the process for the single solution path
+        Start-Process -FilePath $upgradeAssistantPath -ArgumentList $argumentList -Wait -ErrorAction Stop
+    }
 }
 catch {
     $errorMessage = $_.Exception.Message
     Write-Host "Error occurred: $errorMessage"
     Add-Content -Path $logFilePath -Value "Error Occurred: $errorMessage"
 }
+
 Read-Host "Press Enter to exit"
+
 
 # SIG # Begin signature block
 # MIIKdwYJKoZIhvcNAQcCoIIKaDCCCmQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU6Ct/24vqMtrhNlzmfmPOzl7D
-# 0oWgggfNMIIHyTCCBbGgAwIBAgITfgAgCz3Z3MPDcN7A7QAAACALPTANBgkqhkiG
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUbDcl+vsHyJXsxXic6IjLzzhC
+# iqCgggfNMIIHyTCCBbGgAwIBAgITfgAgCz3Z3MPDcN7A7QAAACALPTANBgkqhkiG
 # 9w0BAQsFADBcMRMwEQYKCZImiZPyLGQBGRYDY29tMRcwFQYKCZImiZPyLGQBGRYH
 # bXBoYXNpczEUMBIGCgmSJomT8ixkARkWBGNvcnAxFjAUBgNVBAMTDU1waGFzaXNS
 # b290Q0EwHhcNMjMxMjE4MDMyNTQyWhcNMjUxMjE3MDMyNTQyWjCBljETMBEGCgmS
@@ -109,11 +144,11 @@ Read-Host "Press Enter to exit"
 # MRQwEgYKCZImiZPyLGQBGRYEY29ycDEWMBQGA1UEAxMNTXBoYXNpc1Jvb3RDQQIT
 # fgAgCz3Z3MPDcN7A7QAAACALPTAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEK
 # MAigAoAAoQKAADAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3
-# AgELMQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU2PQNO8DJv8gjGTIq
-# d7E3yt8rc6IwDQYJKoZIhvcNAQEBBQAEggEAaF9xmoeK8J5nADgSehIQJVP6FTcC
-# ATJp2Wk+9lWH5296rIEdP6wV7FW5qLzd+WZ3INL8nYQjYfHlNn9pHUUwc7fcyWxV
-# CrfdijDdjPVUg2eetOFOwit9r+qiVxW++Wj6owpORTgt71nTrtjiLzl7hS/BCwCj
-# gzC5eyDTPUpDBxCkm7imRMyE8uRnUo7si3X8JED0RoH0nJKbt+i0pXFa/wb3773U
-# S+h/cK+Pcqu9MjeZm7qFCtsHXP5Z3ZXfBh9F665kdWfhAdJOnaf2HXYNj2atAyMO
-# ldUMPXTQP2vFNeA92oI+DykDJtGIItgWZ2uEez5bPIOCrmotWx/3cMuIOw==
+# AgELMQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUNBxLz0nnoggaM/GK
+# v+r0iqbPkpkwDQYJKoZIhvcNAQEBBQAEggEAKEJtLoSs1DEEDxceD+PZFVrMrZ6D
+# NWVsKdfbdL2sy3cqhuQpOYrhz1WOqHswP0XQPuTJZID39gcRDpTFoR5KdPBSHpug
+# +ccmHURGQIv+j4pMMdhJlD2kPA6s3ubl5i8kHYO1y1V1D8GWs9PFDV3efFtoH3kP
+# JaFuQXlX3Ysf7CAP3MS2hwsoPz6rFsd90r1Df6G5nEZ0eNC5gq3AbKm2N8uNVhUs
+# 7UH5qtAs7tmZ6zyR5tyVB0T9uRd9qTVf6theMureOtvfQ7t6vsnHHgEyA4ypcROL
+# C5GtlofPAGA0ATJ/1pkcJIzr8XeEDe8txdOQuO6wCaTVdePFsC0stnMrHg==
 # SIG # End signature block
