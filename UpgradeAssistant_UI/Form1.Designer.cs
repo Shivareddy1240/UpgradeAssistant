@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             lblUpgradeAssistantPath = new System.Windows.Forms.Label();
             lblSolutionPath = new System.Windows.Forms.Label();
             dlgUpgAsstPath = new System.Windows.Forms.OpenFileDialog();
@@ -54,7 +55,11 @@
             btnAnalysisLog = new System.Windows.Forms.Button();
             txtAnalysisLog = new System.Windows.Forms.TextBox();
             fldrBrowseAnalysisLog = new System.Windows.Forms.FolderBrowserDialog();
+            errProvider = new System.Windows.Forms.ErrorProvider(components);
+            lblAnalysisPath = new System.Windows.Forms.Label();
+            lblErrorLogPath = new System.Windows.Forms.Label();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)errProvider).BeginInit();
             SuspendLayout();
             // 
             // lblUpgradeAssistantPath
@@ -62,18 +67,18 @@
             lblUpgradeAssistantPath.AutoSize = true;
             lblUpgradeAssistantPath.Location = new System.Drawing.Point(36, 38);
             lblUpgradeAssistantPath.Name = "lblUpgradeAssistantPath";
-            lblUpgradeAssistantPath.Size = new System.Drawing.Size(158, 15);
+            lblUpgradeAssistantPath.Size = new System.Drawing.Size(163, 15);
             lblUpgradeAssistantPath.TabIndex = 0;
-            lblUpgradeAssistantPath.Text = "Upgrade Assistant Path(.exe)";
+            lblUpgradeAssistantPath.Text = "Upgrade Assistant Path(.exe)*";
             // 
             // lblSolutionPath
             // 
             lblSolutionPath.AutoSize = true;
             lblSolutionPath.Location = new System.Drawing.Point(36, 75);
             lblSolutionPath.Name = "lblSolutionPath";
-            lblSolutionPath.Size = new System.Drawing.Size(107, 15);
+            lblSolutionPath.Size = new System.Drawing.Size(112, 15);
             lblSolutionPath.TabIndex = 1;
-            lblSolutionPath.Text = "Solution Path (.sln)";
+            lblSolutionPath.Text = "Solution Path (.sln)*";
             // 
             // dlgUpgAsstPath
             // 
@@ -262,9 +267,9 @@
             lblAnalysisLog.AutoSize = true;
             lblAnalysisLog.Location = new System.Drawing.Point(36, 253);
             lblAnalysisLog.Name = "lblAnalysisLog";
-            lblAnalysisLog.Size = new System.Drawing.Size(73, 15);
+            lblAnalysisLog.Size = new System.Drawing.Size(78, 15);
             lblAnalysisLog.TabIndex = 20;
-            lblAnalysisLog.Text = "Analysis Log";
+            lblAnalysisLog.Text = "Analysis Log*";
             // 
             // btnAnalysisLog
             // 
@@ -283,11 +288,38 @@
             txtAnalysisLog.Size = new System.Drawing.Size(247, 23);
             txtAnalysisLog.TabIndex = 22;
             // 
+            // errProvider
+            // 
+            errProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+            errProvider.ContainerControl = this;
+            // 
+            // lblAnalysisPath
+            // 
+            lblAnalysisPath.AutoSize = true;
+            lblAnalysisPath.Location = new System.Drawing.Point(623, 251);
+            lblAnalysisPath.Name = "lblAnalysisPath";
+            lblAnalysisPath.Size = new System.Drawing.Size(95, 15);
+            lblAnalysisPath.TabIndex = 23;
+            lblAnalysisPath.Text = "hdnAnalysisPath";
+            lblAnalysisPath.Visible = false;
+            // 
+            // lblErrorLogPath
+            // 
+            lblErrorLogPath.AutoSize = true;
+            lblErrorLogPath.Location = new System.Drawing.Point(726, 251);
+            lblErrorLogPath.Name = "lblErrorLogPath";
+            lblErrorLogPath.Size = new System.Drawing.Size(66, 15);
+            lblErrorLogPath.TabIndex = 24;
+            lblErrorLogPath.Text = "hdnErrPath";
+            lblErrorLogPath.Visible = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(800, 450);
+            Controls.Add(lblErrorLogPath);
+            Controls.Add(lblAnalysisPath);
             Controls.Add(txtAnalysisLog);
             Controls.Add(btnAnalysisLog);
             Controls.Add(lblAnalysisLog);
@@ -313,6 +345,7 @@
             Text = "Upgrade Assistant";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)errProvider).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -345,6 +378,9 @@
         private System.Windows.Forms.Button btnAnalysisLog;
         private System.Windows.Forms.TextBox txtAnalysisLog;
         private System.Windows.Forms.FolderBrowserDialog fldrBrowseAnalysisLog;
+        private System.Windows.Forms.ErrorProvider errProvider;
+        private System.Windows.Forms.Label lblAnalysisPath;
+        private System.Windows.Forms.Label lblErrorLogPath;
     }
 }
 
