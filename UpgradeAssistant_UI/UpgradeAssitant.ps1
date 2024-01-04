@@ -29,6 +29,9 @@ if (-not $upgradeAssistantPath -or -not (Test-Path -Path $upgradeAssistantPath) 
 }
 
 try {
+    $startTime = Get-Date
+    Add-Content -Path $logFilePath -Value "Upgrade process started at: $startTime"
+
     $argumentList = @()
 
     # Check if nonInteractive is "Yes"
@@ -61,7 +64,7 @@ try {
             }
 
             # Start the process for each solution path
-            Start-Process -FilePath $upgradeAssistantPath -ArgumentList $argumentList -Wait -ErrorAction Stop
+            $process = Start-Process -FilePath $upgradeAssistantPath -ArgumentList $argumentList -PassThru -Wait -ErrorAction Stop
         }
     }
     else {
@@ -82,23 +85,27 @@ try {
         }
 
         # Start the process for the single solution path
-        Start-Process -FilePath $upgradeAssistantPath -ArgumentList $argumentList -Wait -ErrorAction Stop
+        $process = Start-Process -FilePath $upgradeAssistantPath -ArgumentList $argumentList -PassThru -Wait -ErrorAction Stop
     }
+
+    $endTime = Get-Date
+    Add-Content -Path $logFilePath -Value "Upgrade process completed at: $endTime"
 }
 catch {
     $errorMessage = $_.Exception.Message
+    $errorDetails = $_.Exception | Format-List | Out-String
     Write-Host "Error occurred: $errorMessage"
-    Add-Content -Path $logFilePath -Value "Error Occurred: $errorMessage"
+    Write-Host "Error details: $errorDetails"
+    Add-Content -Path $logFilePath -Value "Error Occurred: $errorMessage`nError Details:`n$errorDetails"
 }
 
-Read-Host "Press Enter to exit"
 
 
 # SIG # Begin signature block
 # MIIKdwYJKoZIhvcNAQcCoIIKaDCCCmQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUbDcl+vsHyJXsxXic6IjLzzhC
-# iqCgggfNMIIHyTCCBbGgAwIBAgITfgAgCz3Z3MPDcN7A7QAAACALPTANBgkqhkiG
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUXTtsIl4YhOs4qJKBTxCB/jwT
+# 3degggfNMIIHyTCCBbGgAwIBAgITfgAgCz3Z3MPDcN7A7QAAACALPTANBgkqhkiG
 # 9w0BAQsFADBcMRMwEQYKCZImiZPyLGQBGRYDY29tMRcwFQYKCZImiZPyLGQBGRYH
 # bXBoYXNpczEUMBIGCgmSJomT8ixkARkWBGNvcnAxFjAUBgNVBAMTDU1waGFzaXNS
 # b290Q0EwHhcNMjMxMjE4MDMyNTQyWhcNMjUxMjE3MDMyNTQyWjCBljETMBEGCgmS
@@ -144,11 +151,11 @@ Read-Host "Press Enter to exit"
 # MRQwEgYKCZImiZPyLGQBGRYEY29ycDEWMBQGA1UEAxMNTXBoYXNpc1Jvb3RDQQIT
 # fgAgCz3Z3MPDcN7A7QAAACALPTAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEK
 # MAigAoAAoQKAADAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3
-# AgELMQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUNBxLz0nnoggaM/GK
-# v+r0iqbPkpkwDQYJKoZIhvcNAQEBBQAEggEAKEJtLoSs1DEEDxceD+PZFVrMrZ6D
-# NWVsKdfbdL2sy3cqhuQpOYrhz1WOqHswP0XQPuTJZID39gcRDpTFoR5KdPBSHpug
-# +ccmHURGQIv+j4pMMdhJlD2kPA6s3ubl5i8kHYO1y1V1D8GWs9PFDV3efFtoH3kP
-# JaFuQXlX3Ysf7CAP3MS2hwsoPz6rFsd90r1Df6G5nEZ0eNC5gq3AbKm2N8uNVhUs
-# 7UH5qtAs7tmZ6zyR5tyVB0T9uRd9qTVf6theMureOtvfQ7t6vsnHHgEyA4ypcROL
-# C5GtlofPAGA0ATJ/1pkcJIzr8XeEDe8txdOQuO6wCaTVdePFsC0stnMrHg==
+# AgELMQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUl7s5Ey8jxyhPxHj9
+# vBMzCzZCWvowDQYJKoZIhvcNAQEBBQAEggEAMbToN5OB7mztbLexukfGdhD8v+ue
+# W6kbl8ThwwHSrIWymYRS1WxPW2REeXR+t1Wb3UZlMnmZJvAzuPish6Rh/b5J8F75
+# lHOTSxtl3fpGh5om/v9UeeiZ9Qa1tGH+TNSkjZ9OHnrgO6HWIt8eQTWDSEVcITOV
+# dzEpVaDh1drcrys6gyfdgJDfC6gp749IBttAgkj0xlvH4hmufleb5RPemuzgbGps
+# hIFUCxj16+sVljMYI/jGfu/bblbQBQnXFWuDSFpP8rU3K0mPhVA9ufEi4pp5Ibko
+# MeDmS1E04DYHzL3NTNlmqR+FekuNuMp+j1+Zyx7P4qxzAiPXBcSzykzs+A==
 # SIG # End signature block
