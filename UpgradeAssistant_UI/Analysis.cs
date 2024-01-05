@@ -12,25 +12,24 @@ using System.IO;
 
 namespace UpgradeAssistant_UI
 {
-    public partial class Form1 : Form
+    public partial class Analysis : Form
     {
         private Label errorSummaryLabel;
-        public Form1()
+        public Analysis()
         {
             InitializeComponent();
             InitializeErrorSummaryLabel();
-            ddlTargetFramework.SelectedIndex = 0;
+            btnProceedUpgrade.Visible = false;
         }
-
         private void InitializeErrorSummaryLabel()
         {
             errorSummaryLabel = new Label
             {
-                ForeColor = System.Drawing.Color.Red,
+                ForeColor = Color.Red,
                 AutoSize = true,
-                Visible = false
+                Visible = false,
+                Location = new Point(10, 10)
             };
-            errorSummaryLabel.Location = new System.Drawing.Point(10, 10);
             this.Controls.Add(errorSummaryLabel);
         }
 
@@ -72,7 +71,7 @@ namespace UpgradeAssistant_UI
             return errorMessages;
         }
 
-        private bool IsTextBoxEmpty(System.Windows.Forms.TextBox textBox)
+        private bool IsTextBoxEmpty(TextBox textBox)
         {
             bool isEmpty = string.IsNullOrWhiteSpace(textBox.Text);
             if (isEmpty)
@@ -89,59 +88,13 @@ namespace UpgradeAssistant_UI
             MessageBox.Show(summaryMessage, "Error Summary", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void btnSubmit_Click(object sender, EventArgs e)
+        private void ClearFields()
         {
-            errProvider.Clear();
-            List<string> errorMessages = ValidateRequiredFields();
-            if (errorMessages.Count > 0)
-            {
-                ShowErrorSummary(errorMessages);
-            }
-            else
-            {
-                string upgradeassistantpath = txtUpgradeAssistantPath.Text;
-                string script = "UpgradeAssitant.ps1";
-                string scriptPath = Path.Combine(Directory.GetCurrentDirectory(), script);
-                string projectpath = txtSolutionPath.Text;
-                string logFilePath = lblErrorLogPath.Text;
-
-                bool backupNotRequired = rbtnBackupNo.Checked;
-                bool upgradeNonInteractive = rbtnNonInteractive.Checked;
-
-                string targetFramework = ddlTargetFramework.Text;
-                try
-                {
-
-                    string skipBackup = backupNotRequired ? "Yes" : "";
-                    string nonInteractive = upgradeNonInteractive ? "Yes" : "";
-                    ProcessStartInfo startInfo = new ProcessStartInfo
-                    {
-                        FileName = "powershell",
-                        Arguments = $"-File \"{scriptPath}\" -upgradeAssistantPath \"{upgradeassistantpath}\" -solutionPath \"{projectpath}\" -skipBackup \"{skipBackup}\" -nonInteractive \"{nonInteractive}\" -targetFramework \"{targetFramework}\" -logFilePath \"{logFilePath}\"",
-                        RedirectStandardOutput = true,
-                        RedirectStandardError = true,
-                        UseShellExecute = false
-                    };
-
-                    using (Process process = new Process())
-                    {
-                        process.StartInfo = startInfo;
-                        process.OutputDataReceived += (sender, e) => Console.WriteLine(e.Data);
-                        process.ErrorDataReceived += (sender, e) => Console.WriteLine(e.Data);
-                        process.Start();
-                        process.BeginOutputReadLine();
-                        process.BeginErrorReadLine();
-                        process.WaitForExit();
-                        MessageBox.Show("Upgrade Completed");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Exception occurreed: {ex.Message}");
-                }
-            }
+            txtSolutionPath.Clear();
+            txtAnalysisLog.Clear();
         }
-        private async void btnAnalyze_Click(object sender, EventArgs e)
+
+        private async void btnAnalyze_ClickAsync(object sender, EventArgs e)
         {
             errProvider.Clear();
             List<string> errorMessages = ValidateRequiredFields();
@@ -157,7 +110,6 @@ namespace UpgradeAssistant_UI
                 string projectpath = txtSolutionPath.Text;
                 try
                 {
-                    //Give your local paths
                     string logFilePath = lblErrorLogPath.Text;
                     string logAnalysisPath = lblAnalysisPath.Text;
                     MessageBox.Show("Analysis Started");
@@ -170,7 +122,6 @@ namespace UpgradeAssistant_UI
                         UseShellExecute = false,
                         CreateNoWindow = true
                     };
-
                     using (Process process = new Process())
                     {
                         process.StartInfo = startInfo;
@@ -185,6 +136,7 @@ namespace UpgradeAssistant_UI
                         });
                         await processTask;
                         MessageBox.Show("Analysis Completed");
+                        btnProceedUpgrade.Visible = true;
                     }
                 }
                 catch (Exception ex)
@@ -193,8 +145,6 @@ namespace UpgradeAssistant_UI
                 }
             }
         }
-
-
         private void btnAnalysisLog_Click(object sender, EventArgs e)
         {
             DialogResult result = fldrBrowseAnalysisLog.ShowDialog();
@@ -214,6 +164,32 @@ namespace UpgradeAssistant_UI
                 lblErrorLogPath.Text = ErrorLogPath;
                 txtAnalysisLog.Text = fldrBrowseAnalysisLog.SelectedPath;
             }
+        }
+
+        private void upgradeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Upgrade upgrade = new Upgrade();
+            upgrade.ShowDialog();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About about = new();
+            about.ShowDialog();
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtUpgradeAssistantPath.Clear();
+            txtSolutionPath.Clear();
+            txtAnalysisLog.Clear();
+        }
+
+        private void btnProceedUpgrade_Click(object sender, EventArgs e)
+        {
+            Upgrade upgrade = new();
+            upgrade.SetAnalysisValue(txtUpgradeAssistantPath.Text,txtSolutionPath.Text,txtAnalysisLog.Text);
+            upgrade.ShowDialog();
         }
     }
 }
