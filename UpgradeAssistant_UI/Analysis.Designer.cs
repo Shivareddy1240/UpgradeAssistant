@@ -57,6 +57,8 @@
             processAnalysis = new System.Diagnostics.Process();
             btnClear = new System.Windows.Forms.Button();
             btnProceedUpgrade = new System.Windows.Forms.Button();
+            progressAnalysis = new System.Windows.Forms.ProgressBar();
+            lblAnalysisProgress = new System.Windows.Forms.Label();
             mnustripModes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)errProvider).BeginInit();
             SuspendLayout();
@@ -284,11 +286,32 @@
             btnProceedUpgrade.UseVisualStyleBackColor = true;
             btnProceedUpgrade.Click += btnProceedUpgrade_Click;
             // 
+            // progressAnalysis
+            // 
+            progressAnalysis.Location = new System.Drawing.Point(36, 244);
+            progressAnalysis.Name = "progressAnalysis";
+            progressAnalysis.Size = new System.Drawing.Size(211, 23);
+            progressAnalysis.TabIndex = 28;
+            progressAnalysis.Visible = false;
+            // 
+            // lblAnalysisProgress
+            // 
+            lblAnalysisProgress.AutoSize = true;
+            lblAnalysisProgress.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            lblAnalysisProgress.Location = new System.Drawing.Point(79, 270);
+            lblAnalysisProgress.Name = "lblAnalysisProgress";
+            lblAnalysisProgress.Size = new System.Drawing.Size(120, 15);
+            lblAnalysisProgress.TabIndex = 29;
+            lblAnalysisProgress.Text = "Analysis in progress...";
+            lblAnalysisProgress.Visible = false;
+            // 
             // Analysis
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(800, 450);
+            Controls.Add(lblAnalysisProgress);
+            Controls.Add(progressAnalysis);
             Controls.Add(btnProceedUpgrade);
             Controls.Add(btnClear);
             Controls.Add(lblheadingAnalysis);
@@ -346,6 +369,8 @@
         private System.Diagnostics.Process processAnalysis;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnProceedUpgrade;
+        private System.Windows.Forms.ProgressBar progressAnalysis;
+        private System.Windows.Forms.Label lblAnalysisProgress;
     }
 }
 

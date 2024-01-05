@@ -113,6 +113,9 @@ namespace UpgradeAssistant_UI
                     string logFilePath = lblErrorLogPath.Text;
                     string logAnalysisPath = lblAnalysisPath.Text;
                     MessageBox.Show("Analysis Started");
+                    progressAnalysis.Visible = true;
+                    lblAnalysisProgress.Visible = true;
+                    progressAnalysis.Style = ProgressBarStyle.Marquee;
                     ProcessStartInfo startInfo = new ProcessStartInfo
                     {
                         FileName = "powershell",
@@ -135,6 +138,8 @@ namespace UpgradeAssistant_UI
                             process.WaitForExit();
                         });
                         await processTask;
+                        progressAnalysis.Visible = false;
+                        lblAnalysisProgress.Visible = false;
                         MessageBox.Show("Analysis Completed");
                         btnProceedUpgrade.Visible = true;
                     }
@@ -188,7 +193,7 @@ namespace UpgradeAssistant_UI
         private void btnProceedUpgrade_Click(object sender, EventArgs e)
         {
             Upgrade upgrade = new();
-            upgrade.SetAnalysisValue(txtUpgradeAssistantPath.Text,txtSolutionPath.Text,txtAnalysisLog.Text);
+            upgrade.SetAnalysisValue(txtUpgradeAssistantPath.Text, txtSolutionPath.Text, txtAnalysisLog.Text);
             upgrade.ShowDialog();
         }
     }
