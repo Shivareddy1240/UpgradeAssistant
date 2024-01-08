@@ -354,8 +354,8 @@
         private System.Windows.Forms.OpenFileDialog dlgUpgAsstPath;
         private System.Windows.Forms.Button btnUpgAssPath;
         private System.Windows.Forms.Button btnSolutionPath;
-        private System.Windows.Forms.TextBox txtUpgradeAssistantPath;
-        private System.Windows.Forms.TextBox txtSolutionPath;
+        internal System.Windows.Forms.TextBox txtUpgradeAssistantPath;
+        internal System.Windows.Forms.TextBox txtSolutionPath;
         private System.Windows.Forms.OpenFileDialog dlgSoluPath;
         private System.Windows.Forms.MenuStrip mnustripModes;
         private System.Windows.Forms.Button btnAnalyze;
@@ -363,7 +363,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblAnalysisLog;
         private System.Windows.Forms.Button btnAnalysisLog;
-        private System.Windows.Forms.TextBox txtAnalysisLog;
+        internal System.Windows.Forms.TextBox txtAnalysisLog;
         private System.Windows.Forms.FolderBrowserDialog fldrBrowseAnalysisLog;
         private System.Windows.Forms.ErrorProvider errProvider;
         private System.Windows.Forms.Label lblAnalysisPath;

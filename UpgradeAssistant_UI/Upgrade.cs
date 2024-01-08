@@ -138,6 +138,7 @@ namespace UpgradeAssistant_UI
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Exception occurreed: {ex.Message}");
+                    MessageBox.Show("Error Occured, Upgrade process not completed succesfully");
                 }
             }
         }
@@ -146,6 +147,8 @@ namespace UpgradeAssistant_UI
         {
             txtSolutionPath.Clear();
             txtAnalysisLog.Clear();
+            Analysis analysis = new Analysis();
+            analysis.txtSolutionPath.Clear();
         }
 
         private void btnAnalysisLog_Click(object sender, EventArgs e)

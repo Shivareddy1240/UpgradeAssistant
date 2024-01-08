@@ -106,18 +106,32 @@ namespace UpgradeAssistant_UI
                 };
                 try
                 {
-                    using (Process process = Process.Start(processStartInfo))
+                    MessageBox.Show("Analysis Started");
+                    progressAnalysis.Visible = true;
+                    lblAnalysisProgress.Visible = true;
+                    progressAnalysis.Style = ProgressBarStyle.Marquee;
+                    using (Process process = new Process())
                     {
-                        if (process != null)
+                        process.StartInfo = processStartInfo;
+                        process.OutputDataReceived += (sender, e) => Console.WriteLine(e.Data);
+                        process.ErrorDataReceived += (sender, e) => Console.WriteLine(e.Data);
+                        Task processTask = Task.Run(() =>
                         {
+                            process.Start();
+                            process.BeginOutputReadLine();
+                            process.BeginErrorReadLine();
                             process.WaitForExit();
-                            MessageBox.Show("Analysis Completed");
-                        }
+                        });
+                        await processTask;
+                        progressAnalysis.Visible = false;
+                        lblAnalysisProgress.Visible = false;
+                        MessageBox.Show("Analysis Completed");
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error: {ex.Message}");
+                    MessageBox.Show("Error Occured, Analysis process not completed succesfully");
                 }
             }
            
