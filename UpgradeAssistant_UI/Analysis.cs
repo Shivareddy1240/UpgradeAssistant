@@ -147,7 +147,6 @@ namespace UpgradeAssistant_UI
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Exception occurreed: {ex.Message}");
-                    MessageBox.Show("Error Occured, Analysis process not completed succesfully");
                 }
             }
         }

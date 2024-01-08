@@ -138,7 +138,6 @@ namespace UpgradeAssistant_UI
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Exception occurreed: {ex.Message}");
-                    MessageBox.Show("Error Occured, Upgrade process not completed succesfully");
                 }
             }
         }
