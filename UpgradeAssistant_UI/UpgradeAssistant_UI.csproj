@@ -28,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="AppCatAssistant.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="UpgradeAnalysis.ps1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

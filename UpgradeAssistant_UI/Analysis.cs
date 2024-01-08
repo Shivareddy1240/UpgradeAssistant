@@ -196,5 +196,11 @@ namespace UpgradeAssistant_UI
             upgrade.SetAnalysisValue(txtUpgradeAssistantPath.Text, txtSolutionPath.Text, txtAnalysisLog.Text);
             upgrade.ShowDialog();
         }
+
+        private void azureAnalysisToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AzureAnalysis azureAnalysis = new();
+            azureAnalysis.ShowDialog();
+        }
     }
 }

@@ -40,6 +40,7 @@
             mnustripModes = new System.Windows.Forms.MenuStrip();
             homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            azureAnalysisToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             documentationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -134,7 +135,7 @@
             // 
             // homeToolStripMenuItem
             // 
-            homeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { upgradeToolStripMenuItem });
+            homeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { upgradeToolStripMenuItem, azureAnalysisToolStripMenuItem });
             homeToolStripMenuItem.Name = "homeToolStripMenuItem";
             homeToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             homeToolStripMenuItem.Text = "Home";
@@ -142,9 +143,16 @@
             // upgradeToolStripMenuItem
             // 
             upgradeToolStripMenuItem.Name = "upgradeToolStripMenuItem";
-            upgradeToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            upgradeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             upgradeToolStripMenuItem.Text = "Upgrade";
             upgradeToolStripMenuItem.Click += upgradeToolStripMenuItem_Click;
+            // 
+            // azureAnalysisToolStripMenuItem
+            // 
+            azureAnalysisToolStripMenuItem.Name = "azureAnalysisToolStripMenuItem";
+            azureAnalysisToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            azureAnalysisToolStripMenuItem.Text = "Azure Analysis";
+            azureAnalysisToolStripMenuItem.Click += azureAnalysisToolStripMenuItem_Click;
             // 
             // helpToolStripMenuItem
             // 
@@ -371,6 +379,7 @@
         private System.Windows.Forms.Button btnProceedUpgrade;
         private System.Windows.Forms.ProgressBar progressAnalysis;
         private System.Windows.Forms.Label lblAnalysisProgress;
+        private System.Windows.Forms.ToolStripMenuItem azureAnalysisToolStripMenuItem;
     }
 }
 

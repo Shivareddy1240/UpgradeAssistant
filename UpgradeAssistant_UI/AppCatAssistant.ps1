@@ -1,54 +1,35 @@
-#Commented Start
-<#
-$upgradeAssistantPath = Read-Host -Prompt "Enter the path to .Net Upgrade Assistant exectable"
-$solutionPath = Read-Host -Prompt "Enter the  path to the solution file(.sln) to be upgraded"
-$logFilePath = Read-Host -Prompt "Enter the  path for error log file"
-$logAnalysis = Read-Host -Prompt "Enter the  path for error log file"
-#>
-#Commented End
-
 param(
-     [string]$upgradeAssistantPath,
+     [string]$appcatAssistantPath,
      [string]$solutionPath,
-     [string]$logFilePath,
-     [string]$logAnalysis
 )
 
-if (-not (Test-Path -Path $logFilePath )){
-	New-Item _Path $logFilePath -ItemType File -Force | Out-Null
-}
-
-if (-not $upgradeAssistantPath -or -not (Test-Path -Path $upgradeAssistantPath) -or -not $solutionPath){
+if (-not $appcatAssistantPath -or -not (Test-Path -Path $appcatAssistantPath) -or -not $solutionPath){
 $errorMessage = "Error: .Net Upgrade Assistant Path or Solution path is is missing or incorrect."  
 Write-Host $errorMessage
-Add-Content -Path $logFilePath -Value $errorMessage
 exit 1
 }
 
 if (-not (Test-Path -Path $solutionPath )){
 $errorMessage = "Error: Solution file not found." 
 Write-Host $errorMessage
-Add-Content -Path $logFilePath -Value $errorMessage
 exit 1
 }
+
 try
 {
     Write-Host "Analysis Started..."
-    $analysisOutput = & $upgradeAssistantPath analyze $solutionPath 2>&1 $analysisOutput | Out-File -FilePath $logAnalysis -Encoding utf8
+    $analysisOutput = & $AppCatAssistantPath analyze $solutionPath
     Write-Host "Analysis Completed..."
-    #Start-Process -FilePath $upgradeAssistantPath -ArgumentList "analyze", "$solutionPath" -Wait -ErrorAction Stop
 }
 catch{
 $errorMessage = $_.Exception.Message
  Write-Host "Error occured: $errorMessage"
- Add-Content -Path $logFilePath -Value "Error Occured : $errorMessage"
 }
- 
 # SIG # Begin signature block
 # MIIKdwYJKoZIhvcNAQcCoIIKaDCCCmQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUE2vTZAjDooyqkaI05tNsOB64
-# S2agggfNMIIHyTCCBbGgAwIBAgITfgAgCz3Z3MPDcN7A7QAAACALPTANBgkqhkiG
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU4LidRsTZF78QpmcX6tUhkL+o
+# 2RCgggfNMIIHyTCCBbGgAwIBAgITfgAgCz3Z3MPDcN7A7QAAACALPTANBgkqhkiG
 # 9w0BAQsFADBcMRMwEQYKCZImiZPyLGQBGRYDY29tMRcwFQYKCZImiZPyLGQBGRYH
 # bXBoYXNpczEUMBIGCgmSJomT8ixkARkWBGNvcnAxFjAUBgNVBAMTDU1waGFzaXNS
 # b290Q0EwHhcNMjMxMjE4MDMyNTQyWhcNMjUxMjE3MDMyNTQyWjCBljETMBEGCgmS
@@ -94,11 +75,11 @@ $errorMessage = $_.Exception.Message
 # MRQwEgYKCZImiZPyLGQBGRYEY29ycDEWMBQGA1UEAxMNTXBoYXNpc1Jvb3RDQQIT
 # fgAgCz3Z3MPDcN7A7QAAACALPTAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEK
 # MAigAoAAoQKAADAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3
-# AgELMQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUt2ivTnsbAw8XqHpR
-# xH8LIBBGB9AwDQYJKoZIhvcNAQEBBQAEggEAEQ2y0juH+Kp7mgA9TOlqOJPavmms
-# bWNb3Gl17FuQvBjnXF7A5GlmxTakS7mie5xYEpXDhrt+AOQwjnAyG8khFwgubcp0
-# O01Nb5iUHKRfWYUEJyq8ikfZ7ChNGNI36UJ+2UeOLYDTUySOESLIpy5pnfuRK8xx
-# JDpV19Bc2RXMjoBG3Rg0cDOdnUSrpVw87LA+WhxCyg4pRRMob8DJRCJ7mOUzLMpW
-# 13/PZu5Z8EOr0EcIN1Z8QDGMBHVC+LqCRvSMeI8R6pd7TGKi8F51W24oR5D17Dw5
-# tX/B/NldHN3r8tYnYhneYjZxQXmddIp0d85fNhJ0ZtC5yDI3NC/wcZKaVQ==
+# AgELMQ4wDAYKKwYBBAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUh0mlHmqYUck3Rvwh
+# 5hUDbJotoWUwDQYJKoZIhvcNAQEBBQAEggEAeMS4d1HzXyKweNJIsN9FqayO4/1q
+# sTkp7tuP7Ib9TBOqZdpbZCclEHAp97RhR+ySGhak5Aim12QlUhGd3FwB0yeiQcyQ
+# KoHfze7X9dT8ZerWxLhjuNdnn73W2V53BYitNPUWYfKqy0vbrAxLBjlIsMI7Th+/
+# j0cVzdoWBJk+jIG0et55LHFnjO3uDBiSyuu2yetojf1kroezoABB3DeEH0xUUtSp
+# QOgueCve7i4i2aoB8+kcwg+OLSol/DNv4XnuGh4K5u4I6hQc4fjHc8nCkBEfPaCI
+# h7s0PTOvq3k7CTjSIzHBB4c4ApYBiom6O3mX6TRJHOIQcl4P1zdMSSM45g==
 # SIG # End signature block
