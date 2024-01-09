@@ -14,7 +14,7 @@ namespace UpgradeAssistant_UI
 {
     public partial class Analysis : Form
     {
-        private Label errorSummaryLabel;
+        internal Label errorSummaryLabel;
         public Analysis()
         {
             InitializeComponent();
@@ -87,13 +87,7 @@ namespace UpgradeAssistant_UI
             string summaryMessage = string.Join(Environment.NewLine, errorMessages);
             MessageBox.Show(summaryMessage, "Error Summary", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
-
-        private void ClearFields()
-        {
-            txtSolutionPath.Clear();
-            txtAnalysisLog.Clear();
-        }
-
+        
         private async void btnAnalyze_ClickAsync(object sender, EventArgs e)
         {
             errProvider.Clear();
@@ -185,13 +179,19 @@ namespace UpgradeAssistant_UI
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            txtUpgradeAssistantPath.Clear();
+            txtUpgradeAssistantPath.Enabled = true;
+            txtSolutionPath.Enabled = true;
+            txtAnalysisLog.Enabled = true;
             txtSolutionPath.Clear();
             txtAnalysisLog.Clear();
+            btnProceedUpgrade.Visible = false;
         }
 
         private void btnProceedUpgrade_Click(object sender, EventArgs e)
         {
+            txtUpgradeAssistantPath.Enabled = false;
+            txtSolutionPath.Enabled = false;
+            txtAnalysisLog.Enabled = false;
             Upgrade upgrade = new();
             upgrade.SetAnalysisValue(txtUpgradeAssistantPath.Text, txtSolutionPath.Text, txtAnalysisLog.Text);
             upgrade.ShowDialog();

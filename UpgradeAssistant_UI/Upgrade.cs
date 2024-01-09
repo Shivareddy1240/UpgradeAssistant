@@ -146,6 +146,8 @@ namespace UpgradeAssistant_UI
         {
             txtSolutionPath.Clear();
             txtAnalysisLog.Clear();
+            rbtnInteractive.Select();
+            rbtnBackupYes.Select();
             Analysis analysis = new Analysis();
             analysis.txtSolutionPath.Clear();
         }
@@ -179,11 +181,11 @@ namespace UpgradeAssistant_UI
             rbtnBackupYes.Select();
             rbtnInteractive.Select();
         }
-        public void SetAnalysisValue(string upgradeAssistant,string solution,string logFile)
+        public void SetAnalysisValue(string upgradeAssistant, string solution, string logFile)
         {
             txtUpgradeAssistantPath.Text = upgradeAssistant;
             txtSolutionPath.Text = solution;
-            txtAnalysisLog.Text = logFile;  
+            txtAnalysisLog.Text = logFile;
         }
     }
 }
