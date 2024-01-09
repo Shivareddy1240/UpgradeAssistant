@@ -169,6 +169,8 @@ namespace UpgradeAssistant_UI
         {
             txtSolutionPath.Clear();
             txtAnalysisLog.Clear();
+            errProvider.Clear();
+            errorSummaryLabel.Visible = false;
             txtUpgradeAssistantPath.Clear();
             Upgrade upgrade = new Upgrade();
             upgrade.ShowDialog();
@@ -182,6 +184,8 @@ namespace UpgradeAssistant_UI
 
         private void btnClear_Click(object sender, EventArgs e)
         {
+            errProvider.Clear();
+            errorSummaryLabel.Visible = false;
             txtUpgradeAssistantPath.Enabled = true;
             txtSolutionPath.Enabled = true;
             txtAnalysisLog.Enabled = true;
