@@ -167,6 +167,9 @@ namespace UpgradeAssistant_UI
 
         private void upgradeToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            txtSolutionPath.Clear();
+            txtAnalysisLog.Clear();
+            txtUpgradeAssistantPath.Clear();
             Upgrade upgrade = new Upgrade();
             upgrade.ShowDialog();
         }
